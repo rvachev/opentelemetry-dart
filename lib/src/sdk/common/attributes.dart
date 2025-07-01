@@ -25,9 +25,18 @@ class Attributes {
     _attributes[attribute.key] = attribute.value;
   }
 
+  Iterable<MapEntry<String, Object>> get entries {
+    return _attributes.entries;
+  }
+
   /// Add all Attributes in List [attributes].
   /// If an Attribute with the same key already exists, it will be overwritten.
   void addAll(List<Attribute> attributes) {
     attributes.forEach(add);
+  }
+
+  @override
+  String toString() {
+    return _attributes.toString();
   }
 }

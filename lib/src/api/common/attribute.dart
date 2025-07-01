@@ -6,6 +6,8 @@ class Attribute {
   final String key;
   final Object value;
 
+  Attribute(this.key, this.value);
+
   /// Create an Attribute from a String value.
   Attribute.fromString(this.key, String this.value);
 
@@ -30,4 +32,9 @@ class Attribute {
 
   /// Create an Attribute from a list of integer values.
   Attribute.fromIntList(this.key, List<int> this.value);
+
+  @override
+  String toString() {
+    return '{$key : $value}';
+  }
 }

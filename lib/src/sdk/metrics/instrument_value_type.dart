@@ -1,0 +1,4 @@
+enum InstrumentValueType {
+  long,
+  double,
+}

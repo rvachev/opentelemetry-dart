@@ -9,8 +9,7 @@ class InstrumentationScope {
   final String _schemaUrl;
   final List<api.Attribute> _attributes;
 
-  InstrumentationScope(
-      this._name, this._version, this._schemaUrl, this._attributes);
+  InstrumentationScope(this._name, this._version, this._schemaUrl, this._attributes);
 
   String get name {
     return _name;
@@ -26,5 +25,9 @@ class InstrumentationScope {
 
   List<api.Attribute> get attributes {
     return _attributes;
+  }
+
+  String get id {
+    return '$name:$version:$schemaUrl';
   }
 }

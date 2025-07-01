@@ -5,16 +5,8 @@ export 'src/api/common/attribute.dart' show Attribute;
 export 'src/api/common/resource_attributes.dart' show ResourceAttributes;
 export 'src/api/common/semantic_attributes.dart' show SemanticAttributes;
 export 'src/api/context/context.dart'
-    show
-        Context,
-        ContextKey,
-        contextWithSpan,
-        contextWithSpanContext,
-        spanContextFromContext,
-        spanFromContext,
-        zone;
-export 'src/api/context/context_manager.dart'
-    show globalContextManager, registerGlobalContextManager;
+    show Context, ContextKey, contextWithSpan, contextWithSpanContext, spanContextFromContext, spanFromContext, zone;
+export 'src/api/context/context_manager.dart' show globalContextManager, registerGlobalContextManager;
 export 'src/api/exporters/span_exporter.dart' show SpanExporter;
 export 'src/api/instrumentation_library.dart' show InstrumentationLibrary;
 export 'src/api/open_telemetry.dart'
@@ -30,8 +22,7 @@ export 'src/api/open_telemetry.dart'
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;
 export 'src/api/propagation/injectors/text_map_setter.dart' show TextMapSetter;
 export 'src/api/propagation/text_map_propagator.dart' show TextMapPropagator;
-export 'src/api/propagation/w3c_trace_context_propagator.dart'
-    show W3CTraceContextPropagator;
+export 'src/api/propagation/w3c_trace_context_propagator.dart' show W3CTraceContextPropagator;
 export 'src/api/span_processors/span_processor.dart' show SpanProcessor;
 export 'src/api/trace/id_generator.dart' show IdGenerator;
 export 'src/api/trace/span.dart' show Span, SpanKind;
@@ -45,3 +36,7 @@ export 'src/api/trace/trace_id.dart' show TraceId;
 export 'src/api/trace/trace_state.dart' show TraceState;
 export 'src/api/trace/tracer.dart' show Tracer;
 export 'src/api/trace/tracer_provider.dart' show TracerProvider;
+export 'src/api/metrics/instruments/instruments.dart';
+export 'src/api/metrics/meter.dart';
+export 'src/api/metrics/meter_provider.dart';
+export 'src/api/metrics/noop/noop_meter.dart';
