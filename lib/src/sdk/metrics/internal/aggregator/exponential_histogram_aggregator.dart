@@ -15,9 +15,16 @@ import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/metric_descrip
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
 final class ExponentialHistogramAggregator implements Aggregator<ExponentialHistogramPointData> {
+  final int _maxBuckets;
+  final int _maxScale;
+
+  ExponentialHistogramAggregator({required int maxBuckets, required int maxScale})
+      : _maxBuckets = maxBuckets,
+        _maxScale = maxScale;
+
   @override
   AggregatorHandle<ExponentialHistogramPointData> createHandle() {
-    return Handle();
+    return Handle(maxBuckets: _maxBuckets, maxScale: _maxScale);
   }
 
   @override
@@ -49,13 +56,18 @@ final class ExponentialHistogramAggregator implements Aggregator<ExponentialHist
 }
 
 final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
-  Handle()
-      : _zeroCount = 0,
+  final int _maxBuckets;
+  final int _maxScale;
+
+  Handle({required int maxBuckets, required int maxScale})
+      : _maxBuckets = maxBuckets,
+        _maxScale = maxScale,
+        _zeroCount = 0,
         _sum = 0.0,
         _min = double.maxFinite,
         _max = -1,
         _count = 0,
-        _currentScale = 0;
+        _currentScale = maxScale;
 
   int _zeroCount;
   double _sum;
@@ -67,11 +79,12 @@ final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
   Base2ExponentialHistogramBuckets? _negativeBuckets;
 
   @override
-  ExponentialHistogramPointData aggregateThenMaybeReset(
-      {required Int64 startEpochNanos,
-      required Int64 epochNanos,
-      List<Attribute> attributes = const [],
-      bool reset = true}) {
+  ExponentialHistogramPointData aggregateThenMaybeReset({
+    required Int64 startEpochNanos,
+    required Int64 epochNanos,
+    List<Attribute> attributes = const [],
+    bool reset = true,
+  }) {
     final pointData = ExponentialHistogramPointData(
       scale: _currentScale,
       sum: _sum,
@@ -80,8 +93,10 @@ final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
       hasMinMax: _count > 0,
       min: _min,
       max: _max,
-      positiveBuckets: _positiveBuckets ?? Base2ExponentialHistogramBuckets(_currentScale),
-      negativeBuckets: _negativeBuckets ?? Base2ExponentialHistogramBuckets(_currentScale),
+      positiveBuckets:
+          _positiveBuckets ?? Base2ExponentialHistogramBuckets(scale: _currentScale, maxBuckets: _maxBuckets),
+      negativeBuckets:
+          _negativeBuckets ?? Base2ExponentialHistogramBuckets(scale: _currentScale, maxBuckets: _maxBuckets),
       startEpochNanos: startEpochNanos,
       epochNanos: epochNanos,
       attributes: attributes,
@@ -93,7 +108,7 @@ final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
       _max = -1;
       _count = 0;
       _zeroCount = 0;
-      _currentScale = 0;
+      _currentScale = _maxScale;
     }
 
     return pointData;
@@ -116,10 +131,10 @@ final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
       _zeroCount++;
       return;
     } else if (value > 0) {
-      _positiveBuckets ??= Base2ExponentialHistogramBuckets(_currentScale);
+      _positiveBuckets ??= Base2ExponentialHistogramBuckets(scale: _currentScale, maxBuckets: _maxBuckets);
       buckets = _positiveBuckets!;
     } else {
-      _negativeBuckets ??= Base2ExponentialHistogramBuckets(_currentScale);
+      _negativeBuckets ??= Base2ExponentialHistogramBuckets(scale: _currentScale, maxBuckets: _maxBuckets);
       buckets = _negativeBuckets!;
     }
 

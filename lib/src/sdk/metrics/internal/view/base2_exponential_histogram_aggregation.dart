@@ -28,7 +28,7 @@ final class Base2ExponentialHistogramAggregation implements Aggregation<Exponent
   Aggregator<ExponentialHistogramPointData> createAggregator(
     InstrumentDescriptor instrumentDescriptor,
   ) {
-    return ExponentialHistogramAggregator();
+    return ExponentialHistogramAggregator(maxBuckets: maxBuckets, maxScale: maxScale);
   }
 
   @override

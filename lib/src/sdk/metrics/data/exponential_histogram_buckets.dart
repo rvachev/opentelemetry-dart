@@ -11,10 +11,10 @@ final class Base2ExponentialHistogramBuckets {
   int _indexStart;
   int _indexEnd;
 
-  Base2ExponentialHistogramBuckets(int scale)
+  Base2ExponentialHistogramBuckets({required int scale, required int maxBuckets})
       : _scale = scale,
         _indexer = Base2ExponentialHistogramIndexer.get(scale),
-        backing = BucketsBacking([]),
+        backing = BucketsBacking(maxBuckets),
         _indexEnd = 0,
         _indexBase = 0,
         _indexStart = 0;
@@ -202,7 +202,9 @@ final class Base2ExponentialHistogramBuckets {
 }
 
 final class BucketsBacking {
-  BucketsBacking(List<int> counts) : _counts = counts;
+  BucketsBacking(int maxSize) : _counts = List.filled(maxSize, 0);
+
+  BucketsBacking._(List<int> counts) : _counts = counts;
 
   List<int> _counts;
 
@@ -250,7 +252,7 @@ final class BucketsBacking {
   }
 
   BucketsBacking clone() {
-    return BucketsBacking(List.of(_counts));
+    return BucketsBacking._(List.of(_counts));
   }
 }
 
