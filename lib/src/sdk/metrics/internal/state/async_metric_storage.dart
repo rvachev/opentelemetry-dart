@@ -2,7 +2,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -15,21 +14,20 @@ import 'package:opentelemetry/src/sdk/metrics/internal/view/attribute_processor.
 import 'package:opentelemetry/src/sdk/metrics/utils.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
-final class AsyncMetricStorage<T extends BasePointData, U extends ExemplarData> extends MetricStorage
-    implements WriteableMetricStorage {
+final class AsyncMetricStorage<T extends BasePointData> extends MetricStorage implements WriteableMetricStorage {
   final AggregationTemporality _aggregationTemporality;
   final AttributesProcessor _attributesProcessor;
   final int _aggregationCardinalityLimit;
-  final Aggregator<T, U> _aggregator;
+  final Aggregator<T> _aggregator;
 
-  final AggregatorHolder<T, U> _aggregatorHolder = {};
+  final AggregatorHolder<T> _aggregatorHolder = {};
   var _lastPoints = <String, T>{};
 
   AsyncMetricStorage({
     required InstrumentDescriptor instrumentDescriptor,
     required AggregationTemporality aggregationTemporality,
     required AttributesProcessor attributesProcessor,
-    required Aggregator<T, U> aggregator,
+    required Aggregator<T> aggregator,
     int? aggregationCardinalityLimit,
   })  : _aggregationTemporality = aggregationTemporality,
         _attributesProcessor = attributesProcessor,

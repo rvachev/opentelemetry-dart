@@ -2,7 +2,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -11,7 +10,7 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/empty_metric_d
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/metric_descriptor.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
-final class DropAggregator extends Aggregator<PointData, ExemplarData<num>> {
+final class DropAggregator extends Aggregator<PointData> {
   static final pointData = PointData(
     value: 0,
     startEpochNanos: Int64(0),
@@ -22,7 +21,7 @@ final class DropAggregator extends Aggregator<PointData, ExemplarData<num>> {
   static final _handle = Handle();
 
   @override
-  AggregatorHandle<PointData, ExemplarData<num>> createHandle() {
+  AggregatorHandle<PointData> createHandle() {
     return _handle;
   }
 
@@ -38,13 +37,14 @@ final class DropAggregator extends Aggregator<PointData, ExemplarData<num>> {
   }
 }
 
-final class Handle implements AggregatorHandle<PointData, ExemplarData<num>> {
+final class Handle implements AggregatorHandle<PointData> {
   @override
-  PointData<num> aggregateThenMaybeReset(
-      {required Int64 startEpochNanos,
-      required Int64 epochNanos,
-      List<Attribute> attributes = const [],
-      bool reset = true}) {
+  PointData<num> aggregateThenMaybeReset({
+    required Int64 startEpochNanos,
+    required Int64 epochNanos,
+    List<Attribute> attributes = const [],
+    bool reset = true,
+  }) {
     return DropAggregator.pointData;
   }
 

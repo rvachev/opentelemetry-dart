@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -6,8 +5,7 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/exponential_hi
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
 
-final class Base2ExponentialHistogramAggregation
-    implements Aggregation<ExponentialHistogramPointData, ExemplarData<double>> {
+final class Base2ExponentialHistogramAggregation implements Aggregation<ExponentialHistogramPointData> {
   static const _defaultMaxBuckets = 160;
   static const _defaultMaxScale = 20;
 
@@ -27,7 +25,7 @@ final class Base2ExponentialHistogramAggregation
   }
 
   @override
-  Aggregator<ExponentialHistogramPointData, ExemplarData<double>> createAggregator(
+  Aggregator<ExponentialHistogramPointData> createAggregator(
     InstrumentDescriptor instrumentDescriptor,
   ) {
     return ExponentialHistogramAggregator();

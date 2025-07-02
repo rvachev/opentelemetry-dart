@@ -6,7 +6,6 @@ import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
@@ -16,7 +15,7 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/explicit_bucke
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/metric_descriptor.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
-final class ExplicitBucketHistogramAggregator implements Aggregator<HistogramPointData, ExemplarData<num>> {
+final class ExplicitBucketHistogramAggregator implements Aggregator<HistogramPointData> {
   final List<double> _boundaries;
 
   ExplicitBucketHistogramAggregator({
@@ -24,7 +23,7 @@ final class ExplicitBucketHistogramAggregator implements Aggregator<HistogramPoi
   }) : _boundaries = UnmodifiableListView(boundaries);
 
   @override
-  AggregatorHandle<HistogramPointData, ExemplarData<num>> createHandle() {
+  AggregatorHandle<HistogramPointData> createHandle() {
     return Handle(boundaries: _boundaries);
   }
 
@@ -72,7 +71,7 @@ final class ExplicitBucketHistogramAggregator implements Aggregator<HistogramPoi
   }
 }
 
-final class Handle implements AggregatorHandle<HistogramPointData, ExemplarData<num>> {
+final class Handle implements AggregatorHandle<HistogramPointData> {
   final List<double> _boundaries;
 
   Handle({required List<double> boundaries})

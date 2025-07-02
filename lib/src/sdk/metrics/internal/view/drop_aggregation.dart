@@ -1,10 +1,9 @@
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
 
-final class DropAggregation implements Aggregation<PointData, ExemplarData<num>> {
+final class DropAggregation implements Aggregation<PointData> {
   static final DropAggregation _instance = DropAggregation._();
 
   static DropAggregation get instance {
@@ -14,7 +13,7 @@ final class DropAggregation implements Aggregation<PointData, ExemplarData<num>>
   const DropAggregation._();
 
   @override
-  Aggregator<PointData, ExemplarData<num>> createAggregator(InstrumentDescriptor instrumentDescriptor) {
+  Aggregator<PointData> createAggregator(InstrumentDescriptor instrumentDescriptor) {
     return Aggregator.drop();
   }
 

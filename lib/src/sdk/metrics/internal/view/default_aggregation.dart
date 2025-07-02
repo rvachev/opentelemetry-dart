@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -41,7 +40,7 @@ final class DefaultAggregation implements Aggregation {
   }
 
   @override
-  Aggregator<BasePointData, ExemplarData<num>> createAggregator(InstrumentDescriptor instrumentDescriptor) {
+  Aggregator<BasePointData> createAggregator(InstrumentDescriptor instrumentDescriptor) {
     return _resolve(instrumentDescriptor).createAggregator(instrumentDescriptor);
   }
 

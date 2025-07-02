@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -6,7 +5,7 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/last_value_agg
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
 
-final class LastValueAggregation implements Aggregation<PointData<num>, ExemplarData<num>> {
+final class LastValueAggregation implements Aggregation<PointData<num>> {
   static final LastValueAggregation _instance = LastValueAggregation._();
 
   static LastValueAggregation get instance {
@@ -16,7 +15,7 @@ final class LastValueAggregation implements Aggregation<PointData<num>, Exemplar
   const LastValueAggregation._();
 
   @override
-  Aggregator<PointData<num>, ExemplarData<num>> createAggregator(InstrumentDescriptor instrumentDescriptor) {
+  Aggregator<PointData<num>> createAggregator(InstrumentDescriptor instrumentDescriptor) {
     return LastValueAggregator();
   }
 

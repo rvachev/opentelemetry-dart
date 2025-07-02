@@ -5,7 +5,6 @@ import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/exponential_histogram_buckets.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data_type.dart';
@@ -15,15 +14,17 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator_han
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/metric_descriptor.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
-final class ExponentialHistogramAggregator implements Aggregator<ExponentialHistogramPointData, ExemplarData<double>> {
+final class ExponentialHistogramAggregator implements Aggregator<ExponentialHistogramPointData> {
   @override
-  AggregatorHandle<ExponentialHistogramPointData, ExemplarData<double>> createHandle() {
+  AggregatorHandle<ExponentialHistogramPointData> createHandle() {
     return Handle();
   }
 
   @override
   ExponentialHistogramPointData diff(
-      ExponentialHistogramPointData previousCumulative, ExponentialHistogramPointData currentCumulative) {
+    ExponentialHistogramPointData previousCumulative,
+    ExponentialHistogramPointData currentCumulative,
+  ) {
     return currentCumulative;
   }
 
@@ -47,7 +48,7 @@ final class ExponentialHistogramAggregator implements Aggregator<ExponentialHist
   }
 }
 
-final class Handle implements AggregatorHandle<ExponentialHistogramPointData, ExemplarData<double>> {
+final class Handle implements AggregatorHandle<ExponentialHistogramPointData> {
   Handle()
       : _zeroCount = 0,
         _sum = 0.0,

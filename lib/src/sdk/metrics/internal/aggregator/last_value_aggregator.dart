@@ -3,7 +3,6 @@ import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/sdk/common/instrumentation_scope.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
@@ -12,9 +11,9 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator_han
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/metric_descriptor.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
-final class LastValueAggregator implements Aggregator<PointData<num>, ExemplarData<num>> {
+final class LastValueAggregator implements Aggregator<PointData<num>> {
   @override
-  AggregatorHandle<PointData<num>, ExemplarData<num>> createHandle() {
+  AggregatorHandle<PointData<num>> createHandle() {
     return Handle();
   }
 
@@ -45,7 +44,7 @@ final class LastValueAggregator implements Aggregator<PointData<num>, ExemplarDa
   }
 }
 
-final class Handle implements AggregatorHandle<PointData<num>, ExemplarData<num>> {
+final class Handle implements AggregatorHandle<PointData<num>> {
   num _current = 0;
 
   @override

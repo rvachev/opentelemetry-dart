@@ -1,4 +1,3 @@
-import 'package:opentelemetry/src/sdk/metrics/data/exemplar_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/aggregator.dart';
@@ -7,7 +6,7 @@ import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/explicit_bucke
 import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
 
-final class ExplicitBucketHistogramAggregation implements Aggregation<HistogramPointData, ExemplarData<num>> {
+final class ExplicitBucketHistogramAggregation implements Aggregation<HistogramPointData> {
   static final ExplicitBucketHistogramAggregation _default =
       ExplicitBucketHistogramAggregation._(ExplicitBucketHistogramUtils.defaultHistogramBucketBoundaries);
 
@@ -24,7 +23,7 @@ final class ExplicitBucketHistogramAggregation implements Aggregation<HistogramP
   }
 
   @override
-  Aggregator<HistogramPointData, ExemplarData<num>> createAggregator(InstrumentDescriptor instrumentDescriptor) {
+  Aggregator<HistogramPointData> createAggregator(InstrumentDescriptor instrumentDescriptor) {
     return ExplicitBucketHistogramAggregator(
       boundaries: _boundaries,
     );
