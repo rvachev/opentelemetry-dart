@@ -1,8 +1,11 @@
-import 'package:opentelemetry/src/sdk/metrics/internal/view/instrument_selector.dart';
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
+import 'package:opentelemetry/src/sdk/metrics/view/instrument_selector.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/view/attribute_processor.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/view/meter_selector.dart';
+import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
+import 'package:opentelemetry/src/sdk/metrics/view/attribute_processor.dart';
+import 'package:opentelemetry/src/sdk/metrics/view/meter_selector.dart';
 
 final class View {
   final String? name;

@@ -1,7 +1,10 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/aggregator/base2_exponential_histogram_indexer.dart';
+import 'package:opentelemetry/src/sdk/metrics/aggregator/base2_exponential_histogram_indexer.dart';
 
 final class Base2ExponentialHistogramBuckets {
   final Base2ExponentialHistogramIndexer _indexer;

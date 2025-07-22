@@ -28,4 +28,4 @@ export 'src/sdk/metrics/export/cardinality_selector.dart';
 export 'src/sdk/metrics/export/metric_filter.dart';
 export 'src/sdk/metrics/export/metric_producer.dart';
 export 'src/sdk/metrics/export/metric_reader.dart';
-export 'src/sdk/metrics/export/metric_exporter.dart';
+export 'src/sdk/metrics/export/exporters/metric_exporter.dart';

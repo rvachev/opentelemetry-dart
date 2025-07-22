@@ -5,9 +5,8 @@ import 'package:logging/logging.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/api/metrics/noop/noop_meter.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/metric_collector.dart';
-import 'package:opentelemetry/src/sdk/metrics/export/metric_reader.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/meter_config.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/state/meter_provider_shared_state.dart';
+import 'package:opentelemetry/src/sdk/metrics/meter_config.dart';
+import 'package:opentelemetry/src/sdk/metrics/state/meter_provider_shared_state.dart';
 import 'package:opentelemetry/src/sdk/metrics/view.dart';
 
 import '../../../api.dart' as api;

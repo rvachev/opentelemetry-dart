@@ -6,8 +6,8 @@ import 'package:opentelemetry/api.dart' as api;
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_value_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/instruments/instruments.dart' as sdk;
-import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/state/meter_shared_state.dart';
+import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.dart';
+import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
 
 class Meter implements api.Meter {
   final MeterSharedState _meterSharedState;

@@ -1,7 +1,10 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 import 'package:opentelemetry/src/api/metrics/instruments/observables.dart' as api;
-import 'package:opentelemetry/src/sdk/metrics/internal/descriptor/instrument_descriptor.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/state/async_metric_storage.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/state/observable_registry.dart';
+import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.dart';
+import 'package:opentelemetry/src/sdk/metrics/state/async_metric_storage.dart';
+import 'package:opentelemetry/src/sdk/metrics/state/observable_registry.dart';
 
 base class ObservableInstrument implements api.Observable {
   final List<AsyncMetricStorage> _storages;

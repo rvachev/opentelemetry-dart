@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 enum MetricDataType {
   /// A Gauge represents a measurement of a double value at a moment in time. Generally only one
   /// instance of a given Gauge metric will be reported per reporting interval.

@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data_type.dart';
@@ -41,32 +44,32 @@ class MetricData {
 }
 
 extension MetricDataTypeMapper on MetricData {
-  GaugeData<PointData<num>> get gaugeData {
+  GaugeData<PointData<num>>? get gaugeData {
     if (type == MetricDataType.gauge) {
       return data as GaugeData<PointData<num>>;
     }
-    return GaugeData.empty();
+    return null;
   }
 
-  SumData<PointData<num>> get sumData {
+  SumData<PointData<num>>? get sumData {
     if (type == MetricDataType.sum) {
       return data as SumData<PointData<num>>;
     }
-    return SumData.empty();
+    return null;
   }
 
-  HistogramData get histogramData {
+  HistogramData? get histogramData {
     if (type == MetricDataType.histogram) {
       return data as HistogramData;
     }
-    return HistogramData.empty();
+    return null;
   }
 
-  ExponentialHistogramData get exponentialHistogramData {
+  ExponentialHistogramData? get exponentialHistogramData {
     if (type == MetricDataType.exponentialHistogram) {
       return data as ExponentialHistogramData;
     }
-    return ExponentialHistogramData.empty();
+    return null;
   }
 
   SummaryData get summaryData {

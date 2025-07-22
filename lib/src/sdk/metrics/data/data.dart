@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';

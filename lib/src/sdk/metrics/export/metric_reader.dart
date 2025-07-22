@@ -1,3 +1,6 @@
+// Copyright 2021-2022 Workiva.
+// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
+
 import 'dart:async';
 
 import 'package:collection/collection.dart';
@@ -7,10 +10,10 @@ import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/aggregation_selector.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/cardinality_selector.dart';
-import 'package:opentelemetry/src/sdk/metrics/export/metric_exporter.dart';
+import 'package:opentelemetry/src/sdk/metrics/export/exporters/metric_exporter.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/metric_filter.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/metric_producer.dart';
-import 'package:opentelemetry/src/sdk/metrics/internal/view/aggregation.dart';
+import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 
 abstract final class MetricReader {
   final AggregationSelector _aggregationSelector;
