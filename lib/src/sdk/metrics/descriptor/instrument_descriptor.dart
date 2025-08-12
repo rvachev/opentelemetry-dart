@@ -3,7 +3,7 @@
 
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_value_type.dart';
-import 'package:opentelemetry/src/sdk/metrics/descriptor/metric_advice.dart';
+import 'package:opentelemetry/src/api/metrics/metric_advice.dart';
 import 'package:opentelemetry/src/sdk/metrics/descriptor/metric_descriptor.dart';
 
 final class InstrumentDescriptor extends MetricDescriptor {

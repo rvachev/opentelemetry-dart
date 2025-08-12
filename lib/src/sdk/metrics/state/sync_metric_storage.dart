@@ -5,7 +5,6 @@ import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/api/common/attribute.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/aggregator/aggregator.dart';
@@ -15,7 +14,6 @@ import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.d
 import 'package:opentelemetry/src/sdk/metrics/state/aggregator_holder.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/metric_storage.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/writeable_metric_storage.dart';
-import 'package:opentelemetry/src/sdk/metrics/view/attribute_processor.dart';
 import 'package:opentelemetry/src/sdk/metrics/utils.dart';
 
 final class SyncMetricStorage extends MetricStorage implements WriteableMetricStorage {

@@ -10,14 +10,21 @@ import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 import 'package:opentelemetry/src/sdk/resource/resource.dart';
 
+/// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
+///
+/// Exports data to console. Might be useful for testing and debugging metrics.
 final class ConsoleMetricExporter implements MetricExporter {
   final AggregationTemporalitySelector _temporalitySelector;
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
+  ///
+  /// Exports data to console. Might be useful for testing and debugging metrics.
   ConsoleMetricExporter({AggregationTemporalitySelector? temporalitySelector})
       : _temporalitySelector = temporalitySelector ?? defaultAggregationTemporalitySelector;
 
   bool _shutdown = false;
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.export}
   @override
   Future<ExportResult> export({required List<MetricData> batch}) async {
     if (_shutdown) return ExportResult.failure;
@@ -88,21 +95,25 @@ final class ConsoleMetricExporter implements MetricExporter {
 }''';
   }
 
-  @override
-  Future<void> forceFlush() {
-    return Future.value();
-  }
-
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.selectAggregation}
   @override
   Aggregation selectAggregation(InstrumentType instrumentType) {
     return defaultAggregationSelector.call(instrumentType);
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.selectAggregationTemporality}
   @override
   AggregationTemporality selectAggregationTemporality(InstrumentType instrumentType) {
     return _temporalitySelector.call(instrumentType);
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.forceFlush}
+  @override
+  Future<void> forceFlush() {
+    return Future.value();
+  }
+
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.shutdown}
   @override
   Future<void> shutdown() {
     _shutdown = true;

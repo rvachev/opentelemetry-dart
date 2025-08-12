@@ -1,17 +1,16 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+// ignore_for_file: comment_references
+
 import 'dart:math';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:logging/logging.dart';
 import 'package:opentelemetry/sdk.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/aggregation_temporality.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
-import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
-import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../proto/opentelemetry/proto/collector/metrics/v1/metrics_service.pb.dart' as pb_metrics_service;
@@ -19,14 +18,27 @@ import '../../../proto/opentelemetry/proto/common/v1/common.pb.dart' as pb_commo
 import '../../../proto/opentelemetry/proto/resource/v1/resource.pb.dart' as pb_resource;
 import '../../../proto/opentelemetry/proto/metrics/v1/metrics.pb.dart' as pb_metrics;
 
+/// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
+///
+/// Exports metrics to Otel Collector mapping [MetricData] to protobufs
 final class CollectorMetricExporter implements MetricExporter {
   final Logger _log = Logger('opentelemetry.CollectorMetricExporter');
 
+  /// The URI to send metrics to.
   final Uri _uri;
+
+  /// The HTTP client to use to send metrics.
+  /// If not provided, a default client will be used.
   final http.Client _client;
+
+  /// Headers to send with each request.
   final Map<String, String> _headers;
+
+  /// Selects the [AggregationTemporality] for the given [InstrumentType].
+  /// If not provided, the default will be used [defaultAggregationTemporalitySelector].
   final AggregationTemporalitySelector _temporalitySelector;
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
   CollectorMetricExporter(
     Uri uri, {
     http.Client? client,
@@ -39,6 +51,7 @@ final class CollectorMetricExporter implements MetricExporter {
 
   var _isShutdown = false;
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.export}
   @override
   Future<ExportResult> export({required List<MetricData> batch}) async {
     if (_isShutdown) {
@@ -95,33 +108,41 @@ final class CollectorMetricExporter implements MetricExporter {
         return;
       }
       // Exponential backoff with jitter
-      final delay = calculateJitteredDelay(retries++, Duration(milliseconds: 100));
+      final delay = _calculateJitteredDelay(retries++, Duration(milliseconds: 100));
       await Future.delayed(delay);
     }
     _log.severe('Failed to export ${batch.length} metrics after $maxRetries retries');
   }
 
-  Duration calculateJitteredDelay(int retries, Duration baseDelay) {
+  Duration _calculateJitteredDelay(int retries, Duration baseDelay) {
     final delay = baseDelay.inMilliseconds * pow(2, retries);
     final jitter = Random().nextDouble() * delay;
     return Duration(milliseconds: (delay + jitter).toInt());
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.selectAggregation}
+  ///
+  /// Uses [defaultAggregationSelector] to select the aggregation.
   @override
   Aggregation selectAggregation(InstrumentType instrumentType) {
     return defaultAggregationSelector.call(instrumentType);
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.selectAggregationTemporality}
   @override
   AggregationTemporality selectAggregationTemporality(InstrumentType instrumentType) {
     return _temporalitySelector.call(instrumentType);
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.forceFlush}
   @override
   Future<void> forceFlush() {
     return Future.value();
   }
 
+  /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter.shutdown}
+  ///
+  /// Also closes the HTTP client.
   @override
   Future<void> shutdown() async {
     _isShutdown = true;

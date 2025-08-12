@@ -20,11 +20,11 @@ abstract interface class Aggregation<T extends BasePointData> {
 
   static Aggregation<PointData<num>> lastValue() => LastValueAggregation.instance;
 
-  static Aggregation<HistogramPointData> explicitBucketHistogram([List<double>? buckerBoundaries]) {
-    if (buckerBoundaries == null) {
+  static Aggregation<HistogramPointData> explicitBucketHistogram([List<double>? bucketBoundaries]) {
+    if (bucketBoundaries == null) {
       return ExplicitBucketHistogramAggregation.getDefault();
     }
-    return ExplicitBucketHistogramAggregation.create(buckerBoundaries);
+    return ExplicitBucketHistogramAggregation.create(bucketBoundaries);
   }
 
   static Aggregation<ExponentialHistogramPointData> base2ExponentialBucketHistogram([int? maxBuckets, int? maxScale]) {

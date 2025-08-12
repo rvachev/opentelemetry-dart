@@ -3,10 +3,8 @@
 
 import 'package:fixnum/fixnum.dart';
 import 'package:opentelemetry/sdk.dart';
-import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/meter_config.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/meter_shared_state.dart';
-import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/view_registry.dart';
 
 final class MeterProviderSharedState {
@@ -44,5 +42,9 @@ final class MeterProviderSharedState {
     }
 
     return result;
+  }
+
+  void shutdownMeter(InstrumentationScope instrumentationScope) {
+    meterSharedStates.remove(instrumentationScope.id);
   }
 }

@@ -16,7 +16,7 @@ final class MetricCollector implements MetricProducer {
         _meterProviderSharedState = meterProviderSharedState;
 
   @override
-  Future<List<MetricData>> produce([MetricFilter? filter]) async {
+  Future<List<MetricData>> produce() async {
     final result = <MetricData>[];
 
     for (final meterSharedState in _meterProviderSharedState.meterSharedStates.values) {

@@ -3,7 +3,6 @@
 
 import 'package:opentelemetry/api.dart';
 import 'package:opentelemetry/sdk.dart';
-import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 
 abstract interface class MetricFilter {
   MetricFilterResult testMetric({

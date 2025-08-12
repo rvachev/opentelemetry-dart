@@ -4,14 +4,10 @@
 import 'dart:collection';
 
 import 'package:opentelemetry/sdk.dart';
-import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/metric_storage.dart';
-import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
-import 'package:opentelemetry/src/sdk/metrics/view/attribute_processor.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/instrument_selector.dart';
 import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/meter_selector.dart';
-import 'package:opentelemetry/src/sdk/metrics/view.dart';
 
 final class ViewRegistry {
   static final defaultView = View(ViewOptions(

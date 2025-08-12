@@ -5,7 +5,7 @@ import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/aggregator/aggregator.dart';
 import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.dart';
-import 'package:opentelemetry/src/sdk/metrics/descriptor/metric_advice.dart';
+import 'package:opentelemetry/src/api/metrics/metric_advice.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/drop_aggregation.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/explicit_bucket_histogram_aggregation.dart';

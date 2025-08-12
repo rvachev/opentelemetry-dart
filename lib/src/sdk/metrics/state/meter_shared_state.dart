@@ -13,7 +13,6 @@ import 'package:opentelemetry/src/sdk/metrics/state/multu_metric_storage.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/observable_registry.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/sync_metric_storage.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/writeable_metric_storage.dart';
-import 'package:opentelemetry/src/sdk/metrics/meter.dart';
 
 final class MeterSharedState {
   late final Meter meter;
@@ -90,6 +89,7 @@ final class MeterSharedState {
           unit: descriptor.unit,
           type: descriptor.type,
           valueType: descriptor.valueType,
+          advice: descriptor.advice,
         );
         final compatibleStorage =
             _metricStorageRegistry.findOrUpdateCompatibleStorage<SyncMetricStorage>(viewDescriptor);
@@ -131,6 +131,7 @@ final class MeterSharedState {
           unit: descriptor.unit,
           type: descriptor.type,
           valueType: descriptor.valueType,
+          advice: descriptor.advice,
         );
         final compatibleStorage =
             _metricStorageRegistry.findOrUpdateCompatibleStorage<AsyncMetricStorage>(viewDescriptor);
@@ -154,5 +155,9 @@ final class MeterSharedState {
     }
 
     return storages;
+  }
+
+  void shutdown() {
+    _meterProviderSharedState.shutdownMeter(_instrumentationScope);
   }
 }

@@ -11,7 +11,6 @@ import 'package:opentelemetry/src/sdk/metrics/instrument_type.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/aggregation_selector.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/cardinality_selector.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/exporters/metric_exporter.dart';
-import 'package:opentelemetry/src/sdk/metrics/export/metric_filter.dart';
 import 'package:opentelemetry/src/sdk/metrics/export/metric_producer.dart';
 import 'package:opentelemetry/src/sdk/metrics/view/aggregation.dart';
 
@@ -19,19 +18,16 @@ abstract final class MetricReader {
   final AggregationSelector _aggregationSelector;
   final AggregationTemporalitySelector _aggregationTemporalitySelector;
   final CardinalitySelector? _cardinalityLimitSelector;
-  final MetricFilter? _filter;
   final List<MetricProducer>? _producers;
 
   MetricReader({
     AggregationSelector? aggregationSelector,
     AggregationTemporalitySelector? aggregationTemporalitySelector,
     CardinalitySelector? cardinalityLimitSelector,
-    MetricFilter? filter,
     List<MetricProducer>? producers,
   })  : _aggregationSelector = aggregationSelector ?? defaultAggregationSelector,
         _aggregationTemporalitySelector = aggregationTemporalitySelector ?? defaultAggregationTemporalitySelector,
         _cardinalityLimitSelector = cardinalityLimitSelector,
-        _filter = filter,
         _producers = producers;
 
   MetricProducer? get metricProducer;
@@ -67,13 +63,12 @@ final class PeriodicExportingMetricReader extends MetricReader {
   PeriodicExportingMetricReader({
     required MetricExporter exporter,
     super.cardinalityLimitSelector,
-    super.filter,
     super.producers,
-    int? exportIntervalMillis,
-    int? exportTimeoutMillis,
+    int exportIntervalMillis = 60000,
+    int exportTimeoutMillis = 30000,
   })  : _exporter = exporter,
-        _exportIntervalMillis = exportIntervalMillis ?? 60000,
-        _exportTimeoutMillis = exportTimeoutMillis ?? 30000,
+        _exportIntervalMillis = exportIntervalMillis,
+        _exportTimeoutMillis = exportTimeoutMillis,
         super(
           aggregationSelector: exporter.selectAggregation,
           aggregationTemporalitySelector: exporter.selectAggregationTemporality,
@@ -113,8 +108,8 @@ final class PeriodicExportingMetricReader extends MetricReader {
 
     final results = await Future.wait(
       [
-        _metricProducer!.produce(_filter),
-        ..._producers?.map((producer) async => producer.produce(_filter)).toList() ?? <Future<List<MetricData>>>[],
+        _metricProducer!.produce(),
+        ..._producers?.map((producer) async => producer.produce()).toList() ?? <Future<List<MetricData>>>[],
       ],
     );
 
@@ -187,8 +182,8 @@ final class PeriodicExportingMetricReader extends MetricReader {
     } on TimeoutException catch (e, trace) {
       _logger.warning(e.message, e, trace);
       return;
-    } on Object {
-      // TODO: global error handler
+    } on Object catch (e, trace) {
+      _logger.severe(e.toString(), e, trace);
     }
   }
 

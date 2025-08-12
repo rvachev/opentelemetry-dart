@@ -25,7 +25,16 @@ export 'src/sdk/trace/span_processors/simple_processor.dart' show SimpleSpanProc
 export 'src/sdk/trace/tracer_provider.dart' show TracerProviderBase;
 export 'src/sdk/metrics/export/aggregation_selector.dart';
 export 'src/sdk/metrics/export/cardinality_selector.dart';
-export 'src/sdk/metrics/export/metric_filter.dart';
 export 'src/sdk/metrics/export/metric_producer.dart';
 export 'src/sdk/metrics/export/metric_reader.dart';
 export 'src/sdk/metrics/export/exporters/metric_exporter.dart';
+export 'src/sdk/metrics/export/exporters/collector_exporter.dart';
+export 'src/sdk/metrics/export/exporters/console_exporter.dart';
+export 'src/sdk/metrics/meter.dart';
+export 'src/sdk/metrics/meter_provider.dart';
+export 'src/sdk/metrics/instrument_type.dart';
+export 'src/sdk/metrics/observable_result.dart';
+export 'src/sdk/metrics/data/aggregation_temporality.dart';
+export 'src/sdk/metrics/view.dart';
+export 'src/sdk/metrics/view/aggregation.dart';
+export 'src/sdk/metrics/view/attribute_processor.dart';

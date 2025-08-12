@@ -1,12 +1,15 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'package:logging/logging.dart';
 import 'package:opentelemetry/src/sdk/metrics/descriptor/instrument_descriptor.dart';
 import 'package:opentelemetry/src/sdk/metrics/state/metric_storage.dart';
 
 typedef StorageMap = Map<InstrumentDescriptor, MetricStorage>;
 
 final class MetricStorageRegistry {
+  final _logger = Logger('opentelemetry.sdk.metrics.periodicexportingmetricreader');
+
   final StorageMap _sharedRegistry = {};
 
   List<MetricStorage> getStorages() {
@@ -50,12 +53,14 @@ final class MetricStorageRegistry {
           existingStorage.updateDescription(expectedDescriptor.description);
         }
 
-        // TODO: warn
+        _logger.warning('A view or instrument with the name ${expectedDescriptor.name}'
+            ' has already been registered, but has a different description and is incompatible with another registered view');
       }
 
       compatibleStorage = existingStorage as T;
     } else {
-      // TODO: warn
+      _logger.warning('A view or instrument with the name ${expectedDescriptor.name}'
+          ' has already been registered and is incompatible with another registered view');
     }
 
     return compatibleStorage;

@@ -3,6 +3,7 @@
 
 import 'package:opentelemetry/src/api/metrics/instruments/instruments.dart';
 import 'package:opentelemetry/src/api/metrics/meter.dart';
+import 'package:opentelemetry/src/api/metrics/metric_advice.dart';
 import 'package:opentelemetry/src/api/metrics/noop/noop_instruments.dart';
 
 /// A no-op instance of a [Meter]
@@ -27,7 +28,7 @@ class NoopMeter implements Meter {
   }
 
   @override
-  Histogram createHistogram(String name, {String? description, String? unit}) {
+  Histogram createHistogram(String name, {String? description, String? unit, MetricAdvice? advice}) {
     return NoopHistogram.instance;
   }
 
@@ -58,4 +59,7 @@ class NoopMeter implements Meter {
     BatchObservableCallback callback,
     List<Observable> observables,
   ) {}
+
+  @override
+  void shutdown() {}
 }
