@@ -59,7 +59,9 @@ final class SyncMetricStorage extends MetricStorage implements WriteableMetricSt
     required Int64 startEpochNanos,
     required Int64 epochNanos,
   }) {
-    final reset = _aggregationTemporality == AggregationTemporality.delta;
+    // Rework this to provide right method to determine if we need to reset the aggregator holder
+    // ignore: prefer_const_declarations
+    final reset = true;
 
     final start = _aggregationTemporality == AggregationTemporality.delta ? _lastCollectedEpochNanos : startEpochNanos;
 
