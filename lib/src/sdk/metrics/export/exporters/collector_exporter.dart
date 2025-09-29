@@ -67,13 +67,11 @@ class CollectorMetricExporter implements MetricExporter {
       return ExportResult.success;
     }
 
-    await send(_uri, batch);
-
-    return ExportResult.success;
+    return send(_uri, batch);
   }
 
   @protected
-  Future<void> send(Uri uri, List<MetricData> batch) async {
+  Future<ExportResult> send(Uri uri, List<MetricData> batch) async {
     const maxRetries = 3;
     var retries = 0;
     // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
@@ -82,7 +80,7 @@ class CollectorMetricExporter implements MetricExporter {
     final resourceMetrics = _resourceMetricsToProtobuf(batch);
 
     if (resourceMetrics.isEmpty) {
-      return;
+      return ExportResult.success;
     }
 
     final body = pb_metrics_service.ExportMetricsServiceRequest(
@@ -99,19 +97,18 @@ class CollectorMetricExporter implements MetricExporter {
           headers: headers,
         );
         if (response.statusCode == 200) {
-          print(response.request?.contentLength);
-          return;
+          return ExportResult.success;
         }
         // If the response is not 200, log a warning
         _log.warning('Failed to export ${batch.length} metrics. '
             'HTTP status code: ${response.statusCode}');
         // If the response is not a valid retry code, do not retry
         if (!valid_retry_codes.contains(response.statusCode)) {
-          return;
+          return ExportResult.failure;
         }
       } catch (e) {
         _log.warning('Failed to export ${batch.length} metrics. $e');
-        return;
+        return ExportResult.failure;
       }
       // Exponential backoff with jitter
       final delay = _calculateJitteredDelay(retries++, Duration(milliseconds: 100));
@@ -121,6 +118,8 @@ class CollectorMetricExporter implements MetricExporter {
 
     // We call this function to inform about a batch of metrics which were not exported to the collector
     _failedToExportMetrics?.call(batch);
+
+    return ExportResult.failure;
   }
 
   Duration _calculateJitteredDelay(int retries, Duration baseDelay) {
