@@ -7,6 +7,7 @@ import 'dart:math';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
@@ -21,7 +22,7 @@ import '../../../proto/opentelemetry/proto/metrics/v1/metrics.pb.dart' as pb_met
 /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
 ///
 /// Exports metrics to Otel Collector mapping [MetricData] to protobufs
-final class CollectorMetricExporter implements MetricExporter {
+class CollectorMetricExporter implements MetricExporter {
   final Logger _log = Logger('opentelemetry.CollectorMetricExporter');
 
   /// The URI to send metrics to.
@@ -38,16 +39,20 @@ final class CollectorMetricExporter implements MetricExporter {
   /// If not provided, the default will be used [defaultAggregationTemporalitySelector].
   final AggregationTemporalitySelector _temporalitySelector;
 
+  final void Function(List<MetricData> batch)? _failedToExportMetrics;
+
   /// {@macro opentelemetry.sdk.metrics.exporters.MetricExporter}
   CollectorMetricExporter(
     Uri uri, {
     http.Client? client,
     Map<String, String> headers = const {},
     AggregationTemporalitySelector? temporalitySelector,
+    void Function(List<MetricData> batch)? failedToExportMetrics,
   })  : _uri = uri,
         _client = client ?? http.Client(),
         _headers = headers,
-        _temporalitySelector = temporalitySelector ?? defaultAggregationTemporalitySelector;
+        _temporalitySelector = temporalitySelector ?? defaultAggregationTemporalitySelector,
+        _failedToExportMetrics = failedToExportMetrics;
 
   var _isShutdown = false;
 
@@ -62,12 +67,13 @@ final class CollectorMetricExporter implements MetricExporter {
       return ExportResult.success;
     }
 
-    await _send(_uri, batch);
+    await send(_uri, batch);
 
     return ExportResult.success;
   }
 
-  Future<void> _send(Uri uri, List<MetricData> batch) async {
+  @protected
+  Future<void> send(Uri uri, List<MetricData> batch) async {
     const maxRetries = 3;
     var retries = 0;
     // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
@@ -112,6 +118,9 @@ final class CollectorMetricExporter implements MetricExporter {
       await Future.delayed(delay);
     }
     _log.severe('Failed to export ${batch.length} metrics after $maxRetries retries');
+
+    // We call this function to inform about a batch of metrics which were not exported to the collector
+    _failedToExportMetrics?.call(batch);
   }
 
   Duration _calculateJitteredDelay(int retries, Duration baseDelay) {
