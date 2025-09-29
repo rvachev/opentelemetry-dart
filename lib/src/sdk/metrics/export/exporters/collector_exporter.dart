@@ -67,11 +67,11 @@ class CollectorMetricExporter implements MetricExporter {
       return ExportResult.success;
     }
 
-    return send(_uri, batch);
+    return send(batch);
   }
 
   @protected
-  Future<ExportResult> send(Uri uri, List<MetricData> batch) async {
+  Future<ExportResult> send(List<MetricData> batch) async {
     const maxRetries = 3;
     var retries = 0;
     // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
@@ -92,7 +92,7 @@ class CollectorMetricExporter implements MetricExporter {
     while (retries < maxRetries) {
       try {
         final response = await _client.post(
-          uri,
+          _uri,
           body: body.writeToBuffer(),
           headers: headers,
         );
