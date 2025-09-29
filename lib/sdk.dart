@@ -38,3 +38,4 @@ export 'src/sdk/metrics/data/aggregation_temporality.dart';
 export 'src/sdk/metrics/view.dart';
 export 'src/sdk/metrics/view/aggregation.dart';
 export 'src/sdk/metrics/view/attribute_processor.dart';
+export 'src/sdk/metrics/data/metric_data.dart';
