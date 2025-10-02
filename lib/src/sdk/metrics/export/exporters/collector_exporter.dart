@@ -10,7 +10,6 @@ import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:opentelemetry/sdk.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/data.dart';
-import 'package:opentelemetry/src/sdk/metrics/data/metric_data.dart';
 import 'package:opentelemetry/src/sdk/metrics/data/point_data.dart';
 import 'package:http/http.dart' as http;
 
@@ -67,16 +66,6 @@ class CollectorMetricExporter implements MetricExporter {
       return ExportResult.success;
     }
 
-    return send(batch);
-  }
-
-  @protected
-  Future<ExportResult> send(List<MetricData> batch) async {
-    const maxRetries = 3;
-    var retries = 0;
-    // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
-    const valid_retry_codes = [429, 502, 503, 504];
-
     final resourceMetrics = _resourceMetricsToProtobuf(batch);
 
     if (resourceMetrics.isEmpty) {
@@ -87,37 +76,51 @@ class CollectorMetricExporter implements MetricExporter {
       resourceMetrics: resourceMetrics,
     );
 
+    final status = await send(body);
+
+    // We call this function to inform about a batch of metrics which were not exported to the collector
+    if (status == ExportResult.failure) {
+      _failedToExportMetrics?.call(batch);
+    }
+
+    return status;
+  }
+
+  @protected
+  Future<ExportResult> send(pb_metrics_service.ExportMetricsServiceRequest request) async {
+    const maxRetries = 3;
+    var retries = 0;
+    // Retryable status from the spec: https://opentelemetry.io/docs/specs/otlp/#failures-1
+    const valid_retry_codes = [429, 502, 503, 504];
+
     final headers = {'Content-Type': 'application/x-protobuf'}..addAll(_headers);
 
     while (retries < maxRetries) {
       try {
         final response = await _client.post(
           _uri,
-          body: body.writeToBuffer(),
+          body: request.writeToBuffer(),
           headers: headers,
         );
         if (response.statusCode == 200) {
           return ExportResult.success;
         }
         // If the response is not 200, log a warning
-        _log.warning('Failed to export ${batch.length} metrics. '
+        _log.warning('Failed to export metrics. '
             'HTTP status code: ${response.statusCode}');
         // If the response is not a valid retry code, do not retry
         if (!valid_retry_codes.contains(response.statusCode)) {
           return ExportResult.failure;
         }
       } catch (e) {
-        _log.warning('Failed to export ${batch.length} metrics. $e');
+        _log.warning('Failed to export metrics. $e');
         return ExportResult.failure;
       }
       // Exponential backoff with jitter
       final delay = _calculateJitteredDelay(retries++, Duration(milliseconds: 100));
       await Future.delayed(delay);
     }
-    _log.severe('Failed to export ${batch.length} metrics after $maxRetries retries');
-
-    // We call this function to inform about a batch of metrics which were not exported to the collector
-    _failedToExportMetrics?.call(batch);
+    _log.severe('Failed to export metrics after $maxRetries retries');
 
     return ExportResult.failure;
   }
